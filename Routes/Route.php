@@ -3,6 +3,7 @@
 
 namespace Routes;
 
+use http\Encoding\Stream\Debrotli;
 use Routes\RouteMiddleWare;
 
 class Route
@@ -74,25 +75,31 @@ class Route
                 array_pop($params);
 
                 $entity = self::getCallback($callback[0], $callback[1]);
-                $viewPage = self::callMiddleWare($pattern, $entity, $callback);
+                $viewPage = self::callMiddleWare($pattern);
 
                 if ($viewPage) {
                     $page = self::callMethod($entity[0], $entity[1], $params);
-                    if (!empty($page)) {
-                        if(is_array($page) or is_object($page)) {
-                            // header('Content-type: application/json');
-                            print json_encode($page);
-                        }
-                        else {
-                            print $page;
-                        }
-                    }
+                    self::res($page);
                 }
                 exit;
             }
         }
         if(!empty(self::$defaultClass)){
             echo call_user_func_array(self::getCallback(null, null), []);
+        }
+    }
+
+    /**
+     * @param mixed $data
+     */
+    public static function res(mixed $data) : void {
+        if (!empty($data)) {
+            if(is_array($data) or is_object($data)) {
+                print json_encode($data);
+            }
+            else {
+                print $data;
+            }
         }
     }
 
@@ -116,63 +123,47 @@ class Route
 
     /**
      * @param string $pattern
-     * @param        $entity
-     * @param        $callback
      *
-     * @return bool|void
+     * @return bool
      */
-    private static function callMiddleWare(string $pattern, $entity, $callback){
+    private static function callMiddleWare(string $pattern): bool
+    {
         $viewPage = true;
+
         if (isset(self::$middleWare[$pattern])) {
-            if ($callback[0] == self::$middleWare[$pattern]['class']) {
-                $viewPage = self::getMiddleWare($entity[0], self::$middleWare[$pattern]['method'], self::$middleWare[$pattern]['return']);
-            } else {
-                $entityMiddleWare = self::getCallback(self::$middleWare[$pattern]['class'], self::$middleWare[$pattern]['method']);
-                $viewPage = self::getMiddleWare($entityMiddleWare[0], self::$middleWare[$pattern]['method'], self::$middleWare[$pattern]['return']);
-            }
+            $viewPage = self::getMiddleWare(self::$middleWare[$pattern]['class']);
         }
 
         return $viewPage;
     }
 
     /**
-     * @param mixed  $object
-     * @param string $method
-     * @param bool   $return
+     * Вызывает мидлвейр
+     * @param mixed $object
      *
-     * @return void|bool
+     * @return bool
      */
-    private static function getMiddleWare($object, $method, $return)
+    private static function getMiddleWare(string $object): bool
     {
-        $result = true;
-        if (method_exists($object, $method)) {
-            $result = self::callMethod($object, $method);
-        }
 
-        if ($return && !$result) {
-            if (method_exists($object, 'break')) {
+        $m = new $object;
 
-                return self::callMethod($object, 'break');
-            }
-
+        if(!$m->init()) {
+            self::res($m->break());
             return false;
         }
 
-        if ($return) {
-            return $result;
-        } else {
-            return true;
-        }
+        return true;
     }
 
     /**
-     * @param mixed  $object
+     * @param string $object
      * @param string $method
-     * @param array  $params
+     * @param array $params
      *
      * @return mixed
      */
-    private static function callMethod($object, string $method, array $params = [])
+    private static function callMethod(mixed $object, string $method, array $params = []): mixed
     {
         return call_user_func_array([
             $object,

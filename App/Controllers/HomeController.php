@@ -2,52 +2,25 @@
 
 namespace App\Controllers;
 
-use App\Services\ProductService;
 use Core\BaseController;
-use Core\MVC;
-use App\Entity\Product;
-use JetBrains\PhpStorm\ArrayShape;
+use Core\Response;
+use Core\ResponseError;
 
+/**
+ * Class HomeController
+ * @package App\Controllers
+ */
 class HomeController extends BaseController
 {
-    private ProductService $productService;
-
-    public function __construct()
-    {
-        $this->productService = new ProductService();
-    }
-
     /**
-     * @return array
+     * @return Response
      */
-    #[ArrayShape(['home' => "string"])] public function index() : array {
-        return $this->productService->getAll();
-    }
+    public function index() : Response {
 
-    /**
-     * Добавить категорию
-     *
-     * @return array
-     */
-    public function addCategory() : array {
+        $res = new Response(['demo' => 'dem']);
+        $res->setHttpCode(200);
+        $res->error = new ResponseError('Ошибка сохранения');
 
-    }
-
-    /**
-     * Добавить новый продукт
-     *
-     * @return array
-     */
-    public function addProduct() : array {
-
-    }
-
-    /**
-     * Создать поле для категории
-     *
-     * @return array
-     */
-    public function addCategoryField() : array {
-
+        return $res;
     }
 }

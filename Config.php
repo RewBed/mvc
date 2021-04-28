@@ -24,7 +24,7 @@ class Config
      *
      * @var bool
      */
-    public static bool $withDB = true;
+    public static bool $withDB = false;
 
     /**
      * Путь до папки проекта

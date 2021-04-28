@@ -3,8 +3,6 @@
 namespace Core;
 
 use Exception;
-use http\Encoding\Stream\Debrotli;
-use MongoDB\Driver\Server;
 use PDO;
 use PDOException;
 use PDOStatement;
@@ -17,7 +15,7 @@ class PDOWrap
     private $errorCode;
 
     /** @var $stmt PDOStatement */
-    private $stmt;
+    private PDOStatement $stmt;
 
     /**
      * Генерация SQL запроса
@@ -45,6 +43,9 @@ class PDOWrap
      */
     private string $SQLFIELDS = 'SQLFIELDS';
 
+    /**
+     * PDOWrap constructor.
+     */
     public function __construct()
     {
         $dsn = 'mysql:host=' . \Config::$db['db_host'] . ';dbname=' . \Config::$db['db_name'];

@@ -4,7 +4,7 @@ namespace Routes;
 
 
 use App\Controllers\HomeController;
-use App\Controllers\CategoryController;
+use App\MiddleWares\TestMiddle;
 
 /**
  * Class Routes
@@ -19,8 +19,7 @@ class Routes
     public static function execute() : void {
 
         /** API */
-        Route::route('/', HomeController::class);
-        Route::route('/api/category/save', CategoryController::class, 'create');
+        Route::route('/', HomeController::class)->middleWare(TestMiddle::class);
 
         Route::execute();
     }

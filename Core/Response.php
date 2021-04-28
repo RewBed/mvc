@@ -5,30 +5,37 @@ namespace Core;
 
 
 use JetBrains\PhpStorm\ArrayShape;
+use Core\ResponseError;
+use JetBrains\PhpStorm\Pure;
 
-class Responce
+class Response
 {
     /**
      * Описание ошибки
      *
-     * @var array
+     * @var ResponseError
      */
-    public array $error = [
-        'isError' => false,
-        'code' => 500,
-        'text' => ''
-    ];
+    public ResponseError $error;
 
     /**
      * Содержимое ответа
      *
      * @var mixed
      */
-    public mixed $res;
+    private mixed $res;
 
-    public function __construct(mixed $res)
+    #[Pure] public function __construct(mixed $res = [])
     {
         $this->res = $res;
+    }
+
+    /**
+     * Установить HTTP код
+     *
+     * @param int $code
+     */
+    public function setHttpCode(int $code) : void {
+        http_response_code($code);
     }
 
     /**

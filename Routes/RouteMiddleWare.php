@@ -10,10 +10,11 @@ namespace Routes;
  * @package Route
  */
 class RouteMiddleWare extends Route {
+
     /**
-     * @var
+     * @var string
      */
-    private $pattern;
+    private string $pattern;
 
     /**
      * @param string $pattern
@@ -25,15 +26,13 @@ class RouteMiddleWare extends Route {
 
     /**
      * @param string $class
-     * @param string $method
-     * @param bool   $return
      *
      * @return void
      */
-    public function middleWare(string $class, string $method, bool $return = false)
+    public function middleWare(string $class)
     {
-        if(!empty($this->pattern) && !empty($class) && !empty($method)){
-            parent::$middleWare[$this->pattern] = ['class' => $class, 'method' => $method, 'return' => $return];
+        if(!empty($this->pattern) && !empty($class)) {
+            parent::$middleWare[$this->pattern] = ['class' => $class];
         }
     }
 }
