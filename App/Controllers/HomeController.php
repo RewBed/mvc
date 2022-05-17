@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use Core\BaseController;
+use Core\MVC;
 use Core\Response;
 use Core\ResponseError;
 
@@ -13,14 +14,39 @@ use Core\ResponseError;
 class HomeController extends BaseController
 {
     /**
-     * @return Response
+     * Пример ответа
      */
-    public function index() : Response {
+    public function index() : void {
+        MVC::$response->setRes('MVC 1.0');
+        MVC::$response->send();
+    }
 
-        $res = new Response(['demo' => 'dem']);
-        $res->setHttpCode(200);
-        $res->error = new ResponseError('Ошибка сохранения');
+    /**
+     * Пример вывода ошибки
+     */
+    public function errorExample() : void {
+        MVC::$response->setError(new ResponseError('Какой-то текст ошибки'));
+        MVC::$response->send();
+    }
 
-        return $res;
+    /**
+     * Пример вывода ошибки
+     */
+    public function errorExampleSecond() : void {
+        MVC::$response->sendError(new ResponseError('Какой-то текст ошибки, второй вариант'));
+    }
+
+    /**
+     * Пример положительного ответа
+     */
+    public function resExample() : void {
+        MVC::$response->sendRes([1, 2, 3, 4, 5]);
+    }
+
+    /**
+     * Пример положительного ответа
+     */
+    public function resExampleSecond() : void {
+        MVC::$response->sendRes('Ответ строкой');
     }
 }

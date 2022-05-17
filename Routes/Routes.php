@@ -20,6 +20,10 @@ class Routes
 
         /** API */
         Route::route('/', HomeController::class)->middleWare(TestMiddle::class);
+        Route::route('/error', HomeController::class, 'errorExample');
+        Route::route('/res-example', HomeController::class, 'resExample');
+        Route::route('/error-example-second', HomeController::class, 'errorExampleSecond');
+        Route::route('/res-example-second', HomeController::class, 'resExampleSecond');
 
         Route::execute();
     }

@@ -3,8 +3,6 @@
 
 namespace Core;
 
-use http\Header;
-use JetBrains\PhpStorm\ArrayShape;
 use stdClass;
 
 /**
@@ -55,17 +53,8 @@ abstract class BaseController
     }
 
     /**
-     * Разрешить кроссдоменные запросы
-     */
-    public function accessCors() : void {
-        Header('Access-Control-Allow-Origin: *');
-        Header('Access-Control-Allow-Headers: *');
-        Header('Access-Control-Allow-Methods: *');
-    }
-
-    /**
      * Вернет отрендаренный шаблон
-     * @param $template
+     * @param $template string
      * @param $data array
      * @return string
      */
@@ -84,42 +73,5 @@ abstract class BaseController
             return $html;
         }
         return $this->templateNotFound;
-    }
-
-    /**
-     * Задать заголовок
-     *
-     * @param string $headerName
-     * @param string $val
-     */
-    public function setHeader(string $headerName, string $val) : void {
-        Header($headerName . ': '. $val);
-    }
-
-    /**
-     * Вывод ошибки
-     *
-     * @param int $errorCode
-     * @param string $str
-     */
-    public function returnError(int $errorCode, string $str) : void {
-        $arr = [
-            'code' => $errorCode,
-            'error' => $str
-        ];
-
-        print json_encode($arr);
-        exit;
-    }
-
-    /**
-     * вывод стандартных ошибок
-     *
-     * @param int $code
-     */
-    public function defaultError(int $code) : void {
-        switch ($code) {
-            case 401: $this->returnError($code, '403 Forbidden');
-        }
     }
 }

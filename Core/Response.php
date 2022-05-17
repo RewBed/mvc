@@ -4,9 +4,7 @@
 namespace Core;
 
 
-use JetBrains\PhpStorm\ArrayShape;
 use Core\ResponseError;
-use JetBrains\PhpStorm\Pure;
 
 class Response
 {
@@ -15,7 +13,7 @@ class Response
      *
      * @var ResponseError
      */
-    public ResponseError $error;
+    private ResponseError $error;
 
     /**
      * Содержимое ответа
@@ -23,11 +21,6 @@ class Response
      * @var mixed
      */
     private mixed $res;
-
-    #[Pure] public function __construct(mixed $res = [])
-    {
-        $this->res = $res;
-    }
 
     /**
      * Установить HTTP код
@@ -39,14 +32,80 @@ class Response
     }
 
     /**
-     * Вывод ответа
+     * Задать заголовок
      *
-     * @return array
+     * @param string $headerName
+     * @param string $val
      */
-    #[ArrayShape(['error' => "array", 'res' => "mixed"])] public function get() : array {
-        return [
-            'error' => $this->error,
-            'res' => $this->res
-        ];
+    public function setHeader(string $headerName, string $val) : void {
+        Header($headerName . ': '. $val);
+    }
+
+    /**
+     * Разрешить кроссдоменные запросы
+     */
+    public function accessCors() : void {
+        Header('Access-Control-Allow-Origin: *');
+        Header('Access-Control-Allow-Headers: *');
+        Header('Access-Control-Allow-Methods: *');
+    }
+
+    /**
+     * Установить значение ошибки
+     *
+     * @param ResponseError $error
+     */
+    public function setError(ResponseError $error) : void {
+        $this->error = $error;
+    }
+
+    /**
+     * Установить значение для ответа
+     *
+     * @param mixed $res
+     */
+    public function setRes(mixed $res) : void {
+        $this->res = $res;
+    }
+
+    /**
+     * Отправить ответ
+     */
+    public function send() : void {
+
+        $data = [];
+
+        if(isset($this->res))
+            $data['res'] = $this->res;
+
+        if(isset($this->error)) {
+            $this->setHttpCode($this->error->getCode());
+            $data['error'] = $this->error;
+        }
+
+
+        $this->setHeader('Content-Type', 'application/json; charset=utf-8');
+
+        print json_encode($data);
+    }
+
+    /**
+     * Отправить положительный ответ
+     *
+     * @param mixed $res
+     */
+    public function sendRes(mixed $res) : void {
+        $this->res = $res;
+        $this->send();
+    }
+
+    /**
+     * Отправить ошибку
+     *
+     * @param \Core\ResponseError $error
+     */
+    public function sendError(ResponseError $error) : void {
+        $this->error = $error;
+        $this->send();
     }
 }

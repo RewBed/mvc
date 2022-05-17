@@ -11,6 +11,13 @@ class MVC
     public static PDOWrap $pdo;
 
     /**
+     * Объект для формирования ответа
+     *
+     * @var Response
+     */
+    public static Response $response;
+
+    /**
      * Инициализация MVC
      */
     public static function init() : void {
@@ -19,6 +26,9 @@ class MVC
         if(Config::$withDB) {
             self::dbConnect();
         }
+
+        // инициализация объекта ответа
+        self::$response = new Response();
 
         // запуск роутов
         Routes::execute();
