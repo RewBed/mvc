@@ -32,14 +32,44 @@ abstract class Entity
      */
     protected string $table;
 
+    /**
+     * Сохранять время создания и обновления в таблицу
+     *
+     * @var bool
+     */
+    protected bool $withoutTime = false;
+
 
     /**
      * Entity constructor.
      * @param int $id
      */
-    public function __construct()
+    public function __construct(int $id = 0)
     {
+        if($id) {
+            $row = MVC::$pdo->getSingle([], ['id' => $id], $this->table);
+            $this->setRow($row);
+        }
+    }
 
+    public function setRow(array $row) {
+        if(!empty($row)) {
+            foreach ($row as $key => $value) {
+                if(property_exists($this, $key)) {
+                    $this->{$key} = $value;
+                }
+            }
+        }
+    }
+
+    public function setRowStd(\stdClass $row) {
+        if(!empty($row)) {
+            foreach ($row as $key => $value) {
+                if(property_exists($this, $key) && $key !== 'updateTime' && $key !== 'createTime') {
+                    $this->{$key} = $value;
+                }
+            }
+        }
     }
 
     /**
@@ -51,15 +81,27 @@ abstract class Entity
         $data = [];
 
         // время создания и время обновления записи
-        $this->updateTime = time();
-        if(!$this->id)
-            $this->createTime = time();
+        if(!$this->withoutTime) {
+            $this->updateTime = time();
+            if(!$this->id)
+                $this->createTime = time();
+        }
 
         // заполнение свойств
         $reflect = new ReflectionClass($this);
         $props = $reflect->getProperties(ReflectionProperty::IS_PUBLIC);
-        foreach ($props as $key => $prop)
-            $data[$prop->name] = $this->{$prop->name};
+        foreach ($props as $key => $prop) {
+            if($prop->name === 'createTime' || $prop->name === 'updateTime') {
+                if(!$this->withoutTime) {
+                    $data[$prop->name] = $this->{$prop->name};
+                }
+            }
+            else {
+                if(!empty($this->{$prop->name})) {
+                    $data[$prop->name] = $this->{$prop->name};
+                }
+            }
+        }
 
         // если это новая запись
         if(!$this->id) {

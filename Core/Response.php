@@ -22,6 +22,11 @@ class Response
      */
     private mixed $res;
 
+    #[Pure] public function __construct(mixed $res = [])
+    {
+        $this->res = $res;
+    }
+
     /**
      * Установить HTTP код
      *

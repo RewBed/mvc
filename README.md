@@ -36,4 +36,5 @@ url: `/example/(\d)/params/(\w)`
 `Route::route('/', HomeController::class)->middleWare(TestMiddle::class);`
 
 # MIGRATIONS
-`php `
+`php vendor/bin/phinx create MyNewMigration`  
+`php vendor/bin/phinx migrate -e development`

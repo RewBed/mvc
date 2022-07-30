@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 use Phinx\Migration\AbstractMigration;
 
-final class ProductMigration extends AbstractMigration
+final class AddStartMigration extends AbstractMigration
 {
     /**
      * Change Method.
@@ -18,10 +18,10 @@ final class ProductMigration extends AbstractMigration
      */
     public function change(): void
     {
-        $this->table('categories')
-            ->addColumn('name', 'string')
-            ->addColumn('alias', 'string')
-            ->addColumn('parentID', 'integer')
+        $this->table('sensor-readings')
+            ->addColumn('temperature', 'integer')
+            ->addColumn('humidity', 'integer')
+            ->addColumn('light', 'integer')
             ->addColumn('createTime', 'integer')
             ->addColumn('updateTime', 'integer')
             ->create();

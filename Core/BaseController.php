@@ -7,9 +7,9 @@ use stdClass;
 
 /**
  * Class BaseController
- * @package App
+ * @package Core
  */
-abstract class BaseController
+class BaseController
 {
 
     public array $post;

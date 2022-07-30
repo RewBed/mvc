@@ -3,7 +3,6 @@
 
 namespace Routes;
 
-use http\Encoding\Stream\Debrotli;
 use Routes\RouteMiddleWare;
 
 class Route
@@ -106,7 +105,7 @@ class Route
     /**
      * @param mixed $defaultClass
      */
-    public static function setDefaultClass($defaultClass): void
+    public static function setDefaultClass(mixed $defaultClass): void
     {
         self::$defaultClass = $defaultClass;
     }

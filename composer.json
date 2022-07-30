@@ -3,6 +3,5 @@
         "robmorgan/phinx": "^0.12.5",
         "ext-pdo": "*"
     },
-    "name": "MVC",
     "description": ""
 }

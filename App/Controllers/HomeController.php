@@ -4,7 +4,6 @@ namespace App\Controllers;
 
 use Core\BaseController;
 use Core\MVC;
-use Core\Response;
 use Core\ResponseError;
 
 /**

@@ -12,7 +12,7 @@ return
         'production' => [
             'adapter' => 'mysql',
             'host' => 'localhost',
-            'name' => 'shop',
+            'name' => 'mvc',
             'user' => 'root',
             'pass' => 'secret',
             'port' => '3306',
@@ -21,7 +21,7 @@ return
         'development' => [
             'adapter' => 'mysql',
             'host' => 'localhost',
-            'name' => 'shop',
+            'name' => 'mvc',
             'user' => 'root',
             'pass' => 'secret',
             'port' => '3306',

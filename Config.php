@@ -13,10 +13,10 @@ class Config
      * @var array[]
      */
     public static array $db = [
-        'db_host' => '127.0.0.1',
+        'db_host' => 'mariadb',
         'db_user' => 'root',
         'db_pass' => 'secret',
-        'db_name' => 'shop'
+        'db_name' => 'mvc'
     ];
 
     /**
@@ -24,7 +24,7 @@ class Config
      *
      * @var bool
      */
-    public static bool $withDB = false;
+    public static bool $withDB = true;
 
     /**
      * Путь до папки проекта
