@@ -6,19 +6,20 @@ namespace App\MiddleWares;
 
 use Core\MiddleWare;
 use Core\MVC;
-use Core\Response;
 use Redis;
 
 class RedisMiddle implements MiddleWare
 {
-
     public function init(): bool
     {
-        // TODO: Implement init() method.
         MVC::$redis = new Redis();
 
+        /*var_dump(MVC::$env->get('REDIS_HOST'));
+        var_dump(MVC::$env->get('REDIS_PORT'));
+        var_dump(MVC::$env->get('REDIS_PASSWORD'));*/
+
         // подключаемся к серверу redis
-        MVC::$redis->connect('redis', 6379);
+        MVC::$redis->connect('redis', MVC::$env->get('REDIS_PORT'));
 
         // авторизуемся. 'eustatos' - пароль, который мы задали в файле `.env`
         MVC::$redis->auth('eustatos');

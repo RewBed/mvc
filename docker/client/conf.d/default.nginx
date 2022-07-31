@@ -1,0 +1,25 @@
+server {
+    listen 80;
+    server_name_in_redirect off;
+    access_log  /var/log/nginx/host.access.log  main;
+
+    root /var/www/html/;
+
+    location ~ ^/api(.*)$ {
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_pass http://172.17.0.1:8000/api$1$is_args$args;
+    }
+
+    location ~ ^/socket.io(.*)$ {
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_pass http://172.17.0.1:5000/socket.io$1$is_args$args;
+    }
+
+    location ~ /\.ht {
+        deny  all;
+    }
+
+    error_page  405     =200 $uri;
+}

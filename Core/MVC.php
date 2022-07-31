@@ -11,6 +11,7 @@ class MVC
 {
     public static PDOWrap $pdo;
     public static Redis $redis;
+    public static Env $env;
 
     /**
      * Объект для формирования ответа
@@ -31,6 +32,9 @@ class MVC
 
         // инициализация объекта ответа
         self::$response = new Response();
+
+        // переменные окружения
+        self::$env = new Env();
 
         // запуск роутов
         Routes::execute();
