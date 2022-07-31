@@ -1,5 +1,5 @@
 <template>
-
+    <MainChart />
     <table>
         <thead>
             <tr>
@@ -18,14 +18,14 @@
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
-import { Chart, Grid, Line } from 'vue3-charts'
 
 import axios from "axios";
 import { io } from "socket.io-client";
+import MainChart from "./components/MainChart.vue";
 
 export default defineComponent({
     name: 'LineChart',
-    components: { Chart, Grid, Line},
+    components: {MainChart},
     mounted() {
         axios.get('https://localhost/api/sensor-reading/list/')
             .then(res => {

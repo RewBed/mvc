@@ -28,6 +28,10 @@ class SensorReadingController extends BaseController
         $sensorReading->save();
 
         if($sensorReading->id) {
+
+            $date = new DateTime();
+
+            $sensorReading->insertDate = $date->getTimestamp();
             MVC::$redis->publish('eustatos', json_encode($sensorReading));
             MVC::$response->sendRes(1);
         }
