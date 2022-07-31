@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Demo</title>
+</head>
+<body>
+<script type="module">
+    import { io } from "https://cdn.socket.io/4.4.1/socket.io.esm.min.js";
+
+    const socket = io(window.location.protocol + '//' + window.location.hostname + ':5000');
+    socket.on(
+        'eustatosRoom',
+        function(message) {
+            console.log(message);
+        }
+    );
+</script>
+</body>
+</html>

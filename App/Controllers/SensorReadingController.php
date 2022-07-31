@@ -27,8 +27,11 @@ class SensorReadingController extends BaseController
         $sensorReading = $this->sensorsService->parseData($this->post["command"]);
         $sensorReading->save();
 
-        if($sensorReading->id)
+        if($sensorReading->id) {
+            MVC::$redis->publish('eustatos', json_encode($sensorReading));
             MVC::$response->sendRes(1);
+        }
+
         else
             MVC::$response->sendRes(0);
     }

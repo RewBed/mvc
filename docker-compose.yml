@@ -36,3 +36,25 @@ services:
       - ./docker/mariadb:/var/lib/mysql
     environment:
       MYSQL_ROOT_PASSWORD: secret
+
+  redis:
+    image: redis
+    command: ["sh", "-c", "exec redis-server --requirepass \"${REDIS_PASSWORD}\""]
+
+  socket:
+    image: node
+    user: "node"
+    volumes:
+      - ./socket:/home/node/app
+    ports:
+      - 5000:5000
+      - 5001:5001
+    working_dir: /home/node/app
+    command: "npm start"
+
+  client:
+    image: nginx
+    volumes:
+      - ./client:/usr/share/nginx/html
+    ports:
+      - 8000:80

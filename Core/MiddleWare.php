@@ -7,5 +7,5 @@ use Core\Response;
 interface MiddleWare
 {
     public function init() : bool;
-    public function break() : Response;
+    public function break();
 }

@@ -5,10 +5,12 @@ namespace Core;
 
 use Routes\Routes;
 use Config;
+use Redis;
 
 class MVC
 {
     public static PDOWrap $pdo;
+    public static Redis $redis;
 
     /**
      * Объект для формирования ответа

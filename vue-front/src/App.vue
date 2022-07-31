@@ -1,18 +1,19 @@
 <template>
 
-    <button @click="add">ADD</button>
-    <Chart
-        :size="{ width: char.width, height: char.height }"
-        :data="data"
-        :margin="margin"
-        :direction="direction">
-
-        <template #layers>
-            <Grid strokeDasharray="2,2" />
-            <Line :dataKeys="['insertDate', 'light']" />
-        </template>
-
-    </Chart>
+    <table>
+        <thead>
+            <tr>
+<!--                <th>Дата</th>-->
+                <th>Освещение</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr :key="rowIndex" v-for="(row, rowIndex) in data">
+<!--                <td>{{ row.insertDate }}</td>-->
+                <td>{{ row.light }}</td>
+            </tr>
+        </tbody>
+    </table>
 </template>
 
 <script lang="ts">
@@ -20,45 +21,30 @@ import { defineComponent, ref } from 'vue'
 import { Chart, Grid, Line } from 'vue3-charts'
 
 import axios from "axios";
-
-let plByMonth = []
+import { io } from "socket.io-client";
 
 export default defineComponent({
     name: 'LineChart',
-    components: { Chart, Grid, Line },
+    components: { Chart, Grid, Line},
     mounted() {
         axios.get('https://localhost/api/sensor-reading/list/')
             .then(res => {
                 this.data = res.data.res;
+
+                const socket = io('http://localhost:5000');
+                socket.on('eustatosRoom', (message) => {
+                    this.data.push(JSON.parse(message));
+                    if(this.data.length > 100) {
+                        this.data.shift();
+                    }
+                });
+
             });
     },
-    methods: {
-        add() {
-
-            console.log('add');
-
-            this.data.push({
-                insertDate: 'sdfsf',
-                light: 300
-            });
-
-            console.log(this.data.length);
-        }
-    },
+    methods: {},
     data() {
         return {
-            data: [],
-            direction: 'horizontal',
-            margin: {
-                left: 0,
-                top: 20,
-                right: 20,
-                bottom: 0
-            },
-            char: {
-                width: window.innerWidth - 200,
-                height: window.innerHeight - 200
-            }
+            data: []
         }
     }
 })

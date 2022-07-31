@@ -4,8 +4,6 @@ namespace App\MiddleWares;
 
 use Core\MiddleWare;
 use Core\Response;
-use Core\ResponseError;
-use JetBrains\PhpStorm\Pure;
 
 class TestMiddle implements MiddleWare {
 
@@ -14,10 +12,8 @@ class TestMiddle implements MiddleWare {
         return true;
     }
 
-    #[Pure] public function break(): Response
+    public function break()
     {
-        $res = new Response();
-        $res->error = new ResponseError('Ошибка в тест мидлейвр');
-        return $res;
+        // TODO: Implement break() method.
     }
 }
