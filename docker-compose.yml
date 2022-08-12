@@ -46,6 +46,7 @@ services:
       - ./docker/mariadb:/var/lib/mysql
     environment:
       MYSQL_ROOT_PASSWORD: secret
+      MARIADB_DATABASE: MVC
     networks:
       - net1
 
