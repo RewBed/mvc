@@ -37,6 +37,18 @@ services:
     networks:
         - net1
 
+  composer:
+    image: composer/composer
+    networks:
+      - net1
+    ports:
+      - "9001:9000"
+    volumes:
+      - ./api:/var/www/html
+    container_name: composer
+    working_dir: /var/www/html
+    command: install
+
   mariadb:
     image: mariadb:10.3
     ports:
