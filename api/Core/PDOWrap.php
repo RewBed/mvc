@@ -55,7 +55,6 @@ class PDOWrap
             PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8',
             PDO::ATTR_STRINGIFY_FETCHES  => false,
         );
-
         try {
             $this->dbh = new PDO($dsn, \Config::$db['db_user'], \Config::$db['db_pass'], $options);
             if (!is_null($this->dbh)) {
@@ -67,11 +66,8 @@ class PDOWrap
                 $this->dbh->exec("set names utf8");
             }
         } catch (PDOException $e) {
-            // var_dump($e);
             $this->error = $e->getMessage();
             $this->errorCode = $e->getCode();
-            var_dump($this->errorCode);
-            var_dump($this->error);
             die();
         }
     }
@@ -96,11 +92,6 @@ class PDOWrap
      */
     public function where(string $where) : PDOWrap {
         $this->sql .= " WHERE " . $where;
-        return $this;
-    }
-
-    public function order(string $field, string $direction) : PDOWrap {
-        $this->sql .= " ORDER BY " . $field . " " . $direction;
         return $this;
     }
 
@@ -131,10 +122,18 @@ class PDOWrap
      *
      * @param string $class
      * @return array
+     * @throws Exception
      */
     public function get(string $class) : array {
         $this->sql = str_replace($this->SQLFIELDS, $this->currentFields, $this->sql);
-        return $this->getQuery()->fetchAll(PDO::FETCH_CLASS, $class);
+        var_dump($this->sql);
+        return [];
+        try {
+            return $this->getQuery()->fetchAll(PDO::FETCH_CLASS, $class);
+        }
+        catch (CustomException $e) {
+            print $e->errorLog();
+        }
     }
 
     /**
@@ -154,16 +153,18 @@ class PDOWrap
 
     /**
     * Получить обработанный запрос SQL
+    * Так же проверяет его валидность
     *
     * @return PDOStatement
+    * @throws Exception
     */
     private function getQuery() : PDOStatement {
-        return $this->dbh->query($this->sql);
-    }
 
-    public function query($query)
-    {
-        $this->stmt = $this->dbh->prepare($query);
+        $query = $this->dbh->query($this->sql);
+        if($query)
+            return $query;
+        else
+            throw new CustomException('Not valid sql: '.$this->sql);
     }
 
     /**
@@ -219,6 +220,21 @@ class PDOWrap
     }
 
     // старые методы
+
+    public function getError()
+    {
+        return $this->error;
+    }
+
+    public function getErrorCode()
+    {
+        return $this->errorCode;
+    }
+
+    public function query($query)
+    {
+        $this->stmt = $this->dbh->prepare($query);
+    }
 
     public function bind($param, $value, $type = null)
     {

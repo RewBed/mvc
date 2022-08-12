@@ -31,6 +31,6 @@ class Config
      *
      * @var string
      */
-    public static string $basePath = __DIR__ . '/';
+    public static string $basePath = __DIR__ . 'Config.php/';
 
 }
