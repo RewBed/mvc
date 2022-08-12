@@ -68,6 +68,7 @@ class PDOWrap
         } catch (PDOException $e) {
             $this->error = $e->getMessage();
             $this->errorCode = $e->getCode();
+            var_dump($this->error);
             die();
         }
     }

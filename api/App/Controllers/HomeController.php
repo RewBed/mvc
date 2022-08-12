@@ -49,4 +49,15 @@ class HomeController extends BaseController
     public function resExampleSecond() : void {
         MVC::$response->sendRes('Ответ строкой');
     }
+
+    /**
+     * Информация об API
+     *
+     * @return void
+     */
+    public function info() : void {
+        MVC::$response->sendRes([
+            'api' => 'v1'
+        ]);
+    }
 }

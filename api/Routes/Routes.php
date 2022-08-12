@@ -22,6 +22,9 @@ class Routes
     public static function execute() : void {
 
         /** API */
+
+        Route::route('/api/info', HomeController::class, 'info');
+
         Route::route('/', HomeController::class)->middleWare(TestMiddle::class);
         Route::route('/error', HomeController::class, 'errorExample');
         Route::route('/res-example', HomeController::class, 'resExample');
