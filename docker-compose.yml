@@ -61,11 +61,22 @@ services:
     volumes:
       - ./socket:/home/node/app
     ports:
-      - 5000:5000
+      - "5000:5000"
     working_dir: /home/node/app
     command: "npm start"
     networks:
       - net1
+
+  vue:
+    image: node:alpine
+    build:
+      context: ./docker/vue
+      dockerfile: Dockerfile
+    container_name: vue
+    volumes:
+      - ./vue-front:/usr/src/app
+    ports:
+      - "3000:3000"
 
   client:
     image: nginx
